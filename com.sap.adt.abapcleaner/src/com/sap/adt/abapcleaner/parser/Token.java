@@ -392,8 +392,10 @@ public class Token {
 		if (newToken == null || parentCommand == null || next != null || newToken.prev != null)
 			throw new NullPointerException("newToken");
 
-		if (parent != null && newToken.isChainColon()) 
-			throw new UnexpectedSyntaxException(this, "Unsupported syntax: Chain colon ':' inside parentheses ( ... ) or brackets [ ... ] cannot be processed by " + Program.PRODUCT_NAME + ". Please refactor this command first.");
+		// the following check is deactivated, because a colon inside of parentheses or brackets can be accepted, 
+		// as long as parentheses are NOT closed twice (which is checked below with 'if (parent == null)') 
+		// if (parent != null && newToken.isChainColon()) 
+		// 	throw new UnexpectedSyntaxException(this, "Unsupported syntax: Chain colon ':' inside parentheses ( ... ) or brackets [ ... ] cannot be processed by " + Program.PRODUCT_NAME + ". Please refactor this command first.");
 		
 		newToken.parentCommand = parentCommand;
 		parentCommand.addToken(newToken);
@@ -1993,6 +1995,12 @@ public class Token {
 		} else if (firstToken.matchesOnSiblings(true, "MODIFY", "ENTITY|ENTITIES") && prevToken.isAnyKeyword("RESULT", "FAILED", "MAPPED", "REPORTED")) {
 			// MODIFY ENTITY, ENTITIES ...  [FAILED failed_resp] [REPORTED reported_resp]
 			return MemoryAccessType.WRITE;
+		} else if (firstToken.matchesOnSiblings(true, "MODIFY", "ENTITY|ENTITIES") && prevToken.isAnyKeyword("FROM", "WITH")) {
+			// MODIFY ENTITY, ENTITIES ...  FROM fields_tab / AUTO FILL CID WITH fields_tab /  
+			// [AUTO FILL CID] FIELDS ( comp1 comp2 ... ) WITH fields_tab / [AUTO FILL CID] SET FIELDS WITH fields_tab:
+			// A syntax check on static read-only fields is not possible for all variants, therefore using READ_WRITE to prevent 
+			// introduction of FINAL for the fields_tab
+			return MemoryAccessType.READ_WRITE;
 		} else if (firstToken.matchesOnSiblings(true, "READ", "ENTITY|ENTITIES") && prevToken.isAnyKeyword("RESULT", "FAILED", "REPORTED")) {
 			// READ ENTITY, ENTITIES ... [FAILED failed_resp] [REPORTED reported_resp]
 			return MemoryAccessType.WRITE;
@@ -2087,6 +2095,12 @@ public class Token {
 		if (firstToken.isKeyword("MOVE") && prevToken.isAnyKeyword("TO", "?TO")) {
 			// MOVE {[EXACT] source  TO destination} | {source ?TO destination}. 
 			return MemoryAccessType.WRITE;
+		} else if (firstToken.isKeyword("MOVE") && (prevToken.isChainColon() || prevToken.isComma())) {
+			// MOVE [EXACT] source TO: destination1, destination2, ...
+			Token chainColon = command.getFirstToken().getLastTokenOnSiblings(true, TokenSearch.ASTERISK, "TO", ":");
+			if (chainColon != null) {
+				return MemoryAccessType.WRITE;
+			}
 		} else if (firstToken.isKeyword("PACK") && prevToken.isKeyword("TO")) {
 			// PACK source TO destination. 
 			return MemoryAccessType.WRITE;

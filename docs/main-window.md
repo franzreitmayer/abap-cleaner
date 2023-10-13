@@ -86,9 +86,11 @@ If you need to restrict code changes performed by the cleanup rules to the synta
 cleanup rules that introduce calculation assignment operators such as ```+=``` will be automatically skipped. 
 Changes to this setting trigger a reprocessing of the current cleanup. 
 
-When called from inside ADT, ABAP cleaner automatically determines the ABAP release of the current code document
+When called from inside ADT, ABAP cleaner automatically determines the ABAP release of the current system 
 and restricts rules to this release; with the setting on the UI, this can be restricted even further. 
+The ABAP release of the current system is shown in the window title:
 
+![ABAP cleaner main window - ABAP release in title](images/main-window_title.png "ABAP cleaner main window - ABAP release in title")
 
 ## Display Settings
 
@@ -138,5 +140,16 @@ Note that this serves to deactivate rules in _specific_ code places,
 while the profile configuration should be used to _generally_ activate or deactivate rules. 
 Deactivation of rules in specific code places will be lost when the code is processed again 
 (e.g. with a different profile or by opening ABAP cleaner again).
+
+### No pragmas or pseudo-comments for ABAP cleaner
+
+ABAP cleaner strives to automatically determine where cleanup is possible and beneficial with the various cleanup rules. 
+Therefore, there is no set of pragmas or pseudo-comments that could be written into the code 
+in order to locally deactivate ABAP cleaner rules (and we don't think anyone would want them). 
+
+If you feel that a cleanup rule worsens certain code places, rather than improving them, 
+and this cannot be changed with the options of this cleanup rule, please open an issue and provide some code examples. 
+We could then check whether the rule can be improved to automatically determine these cases 
+and create a better cleanup result for them (or keep them unchanged). 
 
 **Continue reading**: [Profiles and rules](profiles.md)

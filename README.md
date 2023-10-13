@@ -46,7 +46,7 @@ and **configure** options and thresholds for these rules.
 Your team may align on a common configuration and create a **team profile** from it.
 
 
-## Demo
+## Demo of ABAP Cleaner
 
 For a demo of what ABAP cleaner offers, how it is installed, used and configured, you can watch this session on YouTube: 
 [How to clean your ABAP code in seconds with ABAP cleaner](https://www.youtube.com/watch?v=0mp0FuJV5_k).
@@ -61,8 +61,11 @@ Using ABAP cleaner from ADT, the cleanup can be done
 - or **interactively** by opening the ABAP cleaner UI (***Ctrl + Shift + 4*** or menu 'Source Code / Clean Up With Interactive ABAP Cleaner...') 
   which allows you to check the changes, revert those that you don't like with a single mouse click, 
   and finally apply (or discard) the result. 
-
-![ABAP cleaner integration into ABAP Development Tools (ADT)](docs/images/adt-integration.png "ABAP cleaner integration into ABAP Development Tools (ADT)")
+- A third option shows a **read-only preview** of the cleanup result without locking or changing the code, 
+  e.g. if you don't have development authorization in the current system 
+  (***Ctrl + Shift + 5*** or menu 'Source Code / Show Read-Only Preview With ABAP Cleaner...')
+  
+  ![ABAP cleaner integration into ABAP Development Tools (ADT)](docs/images/adt-integration.png "ABAP cleaner integration into ABAP Development Tools (ADT)")
 
 ### Using the Stand-alone App with SAP GUI
 
@@ -79,7 +82,7 @@ both with a "broadband" approach (simultaneously applying 60+ different rules)
 and a focused approach (cleaning with a limited selection of rules). 
 
 ABAP cleaner was implemented with object-oriented ABAP in mind, but it may also be used for code in reports and functions. 
-SQL statements are NOT the focus of ABAP cleaner (meaning that most cleanup rules leave them unchanged).
+ABAP SQL and EML statements are not yet supported (meaning that most cleanup rules simply leave them unchanged). 
 
 
 ## Requirements and Installation
@@ -90,7 +93,7 @@ To install and use the **ABAP cleaner plug-in for ABAP Development Tools** (ADT)
    using an Eclipse installation that is [compatible with ADT](https://tools.hana.ondemand.com/).
 2. Start ADT, select menu 'Help / Install New Software...', 
    copy the link https://sap.github.io/abap-cleaner/updatesite to the 'Work with' field, press Enter 
-   and follow the installation steps, confirming to install ABAP cleaner. ([Known issues](docs/installation-issues.md))
+   and follow the installation steps, confirming to install ABAP cleaner (content is currently unsigned). ([Known issues](docs/installation-issues.md))
 
    ![ABAP cleaner plug-in for ABAP Development Tools - installation](docs/images/adt-installation.png "ABAP cleaner plug-in for ABAP Development Tools - installation")
 

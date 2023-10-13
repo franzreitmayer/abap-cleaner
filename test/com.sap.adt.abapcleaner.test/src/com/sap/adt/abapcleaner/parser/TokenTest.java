@@ -195,6 +195,14 @@ public class TokenTest {
 	}
 	
 	@Test
+	void testTokenTypeIdentifierWithExclamationMark() {
+		// e.g. "DATA: !min TYPE i, !max TYPE i. !min = !max."
+		assertEquals(TokenType.IDENTIFIER, Token.createForAbap(0, 1, "!min", 1).type);
+		assertEquals(TokenType.IDENTIFIER, Token.createForAbap(0, 1, "!ls_any-comp", 1).type);
+		assertEquals(TokenType.IDENTIFIER, Token.createForAbap(0, 1, "!any_method(", 1).type);
+	}
+	
+	@Test
 	void testAddNextErr() {
 		Command command = buildCommand("a = 1.");
 		Token newToken = Token.createForAbap(0, 1, "\" comment", TokenType.COMMENT, 1);
@@ -261,6 +269,46 @@ public class TokenTest {
 			assertTrue(ex.getMessage().indexOf("not supported") >= 0);
 			assertTrue(ex.getMessage().indexOf("Please rewrite") >= 0);
 		}
+	}
+	
+	@Test
+	void testColonInsideParensWithoutComma() {
+		// expect ( ... : ... ) to be accepted if there is no comma (i.e. a chain of one)
+		boolean parseExceptionRaised = false;
+		String codeText = "any_method( : 1 ).";
+		try {
+			Code.parse(null, ParseParams.createForTest(codeText, ABAP.NEWEST_RELEASE));
+		} catch(ParseException ex) {
+			parseExceptionRaised = true;
+		}
+		assertFalse(parseExceptionRaised);
+	}
+	
+	@Test
+	void testColonInsideBrackets() {
+		String codeText = "SELECT \\_spfli[ (1) INNER WHERE :connid = @lc_id1 ]-connid AS connid FROM demo_cds_assoc_scarr AS scarr INTO @DATA(result1), connid = @lc_id2 ]-connid AS connid FROM demo_cds_assoc_scarr AS scarr INTO @DATA(result2).";
+		try {
+			Code.parse(null, ParseParams.createForTest(codeText, ABAP.NEWEST_RELEASE));
+			fail();
+		} catch(ParseException ex) {
+			// expected case
+			assertTrue(ex.getMessage().indexOf("Chain colons inside parentheses") >= 0);
+			assertTrue(ex.getMessage().indexOf("not supported") >= 0);
+			assertTrue(ex.getMessage().indexOf("Please rewrite") >= 0);
+		}
+	}
+	
+	@Test
+	void testColonInsideBracketsWithoutComma() {
+		// expect [ ... : ... ] to be accepted if there is no comma (i.e. a chain of one)
+		boolean parseExceptionRaised = false;
+		String codeText = "SELECT \\_spfli[ (1) INNER WHERE :connid = @lc_id1 ]-connid AS connid FROM demo_cds_assoc_scarr AS scarr INTO @DATA(result1).";
+		try {
+			Code.parse(null, ParseParams.createForTest(codeText, ABAP.NEWEST_RELEASE));
+		} catch(ParseException ex) {
+			parseExceptionRaised = true;
+		}
+		assertFalse(parseExceptionRaised);
 	}
 	
 	@Test
@@ -1079,6 +1127,7 @@ public class TokenTest {
 	@Test
 	void testAccessTypeObsoleteAssignments() {
 		assertAccessType("MOVE EXACT ?source TO !destination.");
+		assertAccessType("MOVE ?source TO: !destination1, !destination2, !destination3.");
 		assertAccessType("PACK ?source TO !destination.");
 	}
 

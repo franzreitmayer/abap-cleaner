@@ -29,12 +29,25 @@ All profiles can be deleted (except the last remaining one).
 For instance, you may want to configure a standard profile in which all rules are activated that you agree to use, 
 and several special profiles for specific cleanup tasks, in which only one or very few rules are activated. 
 
-To pass on profiles to colleagues, you may use the '**Export...**' or '**Export All...**' buttons 
+### Sharing and synchronizing profiles with colleagues
+
+To **quickly pass on profiles** to colleagues, you may use the '**Export...**' or '**Export All...**' buttons 
 and send the exported .cfj file(s) to your colleagues, who could then '**Import...**' them. 
-To change the local profiles folder (e.g. to a synchronized folder), click '**Folder...**' and select the new folder. 
-Existing profiles will be moved to the newly selected folder. 
-Direct access to the local profiles folder (by default, %APPDATA%\SAP\ABAP cleaner\user\profiles)
-is possible from the [main screen](main-window.md) with the menu 'Help / Open Profiles Folder'.
+Direct access to the local profiles folder is possible from the [main screen](main-window.md) 
+with the menu 'Help / Open Profiles Folder'.
+
+If your team wants to share and **continually synchronize profiles**, 
+* your team architect or lead developer may configure a profile as needed 
+  and use the '**Export...**' button to store it on a synchronized folder (e.g. on OneDrive). 
+* Team members can then use the  '**Folders...**' button to add this synchronized folder 
+  as an additional read-only source of **Team Profiles**: 
+
+  ![ABAP cleaner profiles and rules - profile folders](images/profiles_profile-folders.png "ABAP cleaner profiles and rules - profile folders")
+
+  Team profiles then appear as 'team A: default' etc. in the profile list and can be selected and used, but not modified.
+
+* After changing the configuration of a profile, the team architect or lead developer can simply export it again, 
+  overwriting it in the synchronized folder and thus updating it for everyone.
 
 
 ### Profile settings
@@ -82,12 +95,14 @@ The rules are grouped into several sections
 ('EMPTY LINES, SPACES, DECLARATIONS, SYNTAX, COMMANDS, PRETTY PRINTER, ALIGNMENT'); 
 you may (de)activate the section headers to (de)activate all rules in this section, 
 or use the buttons '**Activate: All / Default / Essential / None**' below the list. 
-Here, '**Activate: Default**' will activate all rules that are active by ABAP cleaner defaults (which is true for 
-most rules), while '**Activate: Essential**' will only activate rules that are explicitly demanded by the 
+Here, '**Default**' will activate all rules that are active by ABAP cleaner defaults (which is true for 
+most rules), while '**Essential**' will only activate rules that are explicitly demanded by the 
 [Clean ABAP Styleguide](https://github.com/SAP/styleguides/blob/main/clean-abap/CleanABAP.md).
 
-Click on one rule in the list to see a 'Description', 'References', 'Options', 
-and 'Examples' for this rule on the right-hand side of the window. 
+Click on one rule in the list to see a **Description**, **References**, **Options**, 
+and **Examples** for this rule on the right-hand side of the window. 
+If needed, you may use _Ctrl+C_ to copy the name of the current rule from the rule list to the clipboard. 
+Alternatively, you may right-click the rule name or description on the right-hand side. 
 
 ### References
 
@@ -125,6 +140,9 @@ the involved teams and communities etc.
 Note, however, that ABAP cleaner defaults are only used when creating a _new_ profile (or when you use the 'Default' 
 button described above). By contrast, an already existing profile will not be affected by later changes to the 
 ABAP cleaner defaults. 
+
+More information on how the Clean ABAP style guide, code pal for ABAP, and ABAP cleaner relate to each other 
+can be found in the blog post on [ABAP Tools for Clean ABAP](https://blogs.sap.com/2023/10/09/abap-tools-for-clean-abap/).
 
 
 ### Examples

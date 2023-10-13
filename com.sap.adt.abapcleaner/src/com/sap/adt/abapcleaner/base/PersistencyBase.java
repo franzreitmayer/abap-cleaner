@@ -27,6 +27,13 @@ public class PersistencyBase {
 	}
 	
 	// -------------------------------------------------------------------------
+	// Path
+
+	public String getAbsolutePath(String path) {
+		return fileSystem.getAbsolutePath(path);
+	}
+	
+	// -------------------------------------------------------------------------
 	// File
 	
 	public boolean fileExists(String dir, String file) {
@@ -131,6 +138,9 @@ public class PersistencyBase {
 			else {
 				if (result.charAt(result.length() - 1) != dirSepChar) {
 					result += dirSepChar;
+				}
+				if (!StringUtil.isNullOrEmpty(path) && path.charAt(0) == dirSepChar) {
+					path = path.substring(1);
 				}
 				result += path;
 			}
