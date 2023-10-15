@@ -45,6 +45,9 @@ public class RuleGroup {
 
 			case PRETTY_PRINTER:
 				return "Pretty Printer";
+			
+			case SECURITY:
+				return "Security";
 
 			default:
 				throw new IndexOutOfBoundsException("Unknown RuleGroup!");

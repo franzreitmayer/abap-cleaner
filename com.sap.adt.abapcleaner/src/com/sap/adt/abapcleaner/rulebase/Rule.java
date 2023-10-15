@@ -12,6 +12,8 @@ import com.sap.adt.abapcleaner.rules.commands.*;
 import com.sap.adt.abapcleaner.rules.declarations.*;
 import com.sap.adt.abapcleaner.rules.emptylines.*;
 import com.sap.adt.abapcleaner.rules.prettyprinter.*;
+import com.sap.adt.abapcleaner.rules.security.PathTraversal;
+import com.sap.adt.abapcleaner.rules.security.SecurityCallTransactionWithAuth;
 import com.sap.adt.abapcleaner.rules.spaces.*;
 import com.sap.adt.abapcleaner.rules.syntax.*;
 
@@ -20,8 +22,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 public abstract class Rule {
-	public static final int RULE_COUNT = 60;
-	public static final int RULE_GROUP_COUNT = 7;
+	public static final int RULE_COUNT = 62;
+	public static final int RULE_GROUP_COUNT = 8;
 
 	protected static final String LINE_SEP = ABAP.LINE_SEPARATOR;
 	protected static Language[] abapOnly =  new Language[] { Language.ABAP };
@@ -129,7 +131,11 @@ public abstract class Rule {
          new AlignClearFreeAndSortRule(profile),
          new AlignParametersRule(profile),
          new AlignLogicalExpressionsRule(profile),
-         new AlignCondExpressionsRule(profile)
+         new AlignCondExpressionsRule(profile),
+
+		 // security
+		 new PathTraversal(profile),
+		 new SecurityCallTransactionWithAuth(profile)
       };
 
 		StringBuilder errors = new StringBuilder();
